@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit} from '@angular/core';
 import { apikey, apiroot } from 'src/weather-apikey'
+import { WeatherApiData } from '../models/weatherapi-model';
 import { WeatherApiService } from '../weather-api.service';
 
 @Component({
@@ -9,9 +10,7 @@ import { WeatherApiService } from '../weather-api.service';
 })
 
 export class WeatherAppComponent implements OnInit, OnDestroy{
-  constructor(private weatherapi : WeatherApiService) {}
-
-  returnJSON : any[] = [];
+  constructor(private weatherApi : WeatherApiService) {}
 
   validation = {
     required: true,
@@ -19,21 +18,30 @@ export class WeatherAppComponent implements OnInit, OnDestroy{
     max : 14
   }
 
-  getWeatherForcast(city: string, days: number){
-    this.weatherapi.getWeatherForcast(city, days).subscribe((data : any) => {
+  cityName! : string;
+  numDays! : number;
+  weatherData? : WeatherApiData;
 
-      this.returnJSON = data.forecast;
-      console.log(JSON.stringify(this.returnJSON, null, 2 ));
-      
-      
+  submitInput(){
+    this.getWeatherForecast(this.cityName, this.numDays);
+  }
 
-
-    })
+  private getWeatherForecast(city: string, days: number){
+    this.weatherApi.getWeatherForecast(city, days).subscribe({
+      next:(res) =>{
+      this.weatherData = res;
+    }})
   }
   
 
   ngOnInit(): void {
-      
+    /* test code - set default to Seattle, 10 days */
+    // this.weatherApi.getWeatherForcast('Seattle', 10).subscribe({
+    //   next: (res) => {
+    //     this.weatherData = res;
+    //     console.log(res);
+    //   }
+    // })
   }
 
   ngOnDestroy(): void {

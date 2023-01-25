@@ -1,4 +1,89 @@
-<p>weather-app works!</p>
-<button (click)="getWeatherForcast('london', 10)">Get Weather Report for London, 10 Days</button>
-<button (click)="getWeatherForcast('london', 3)">Get Weather Report for Seattle, 3 Days</button>
-{{returnJSON | json}}
+<div class="search">
+  <form #form="ngForm">
+    <input type="text" name="cityName" id="cityName" placeholder="Search (City or ZIP)" [(ngModel)]="cityName">
+    <input type="number" name="numDays" id="numDays" placeholder="#?" [(ngModel)]="numDays" #numdays="ngModel" [required]="validation.required" [min]="validation.min" [max]="validation.max">
+    <button (click)="submitInput()">Submit!</button>
+  </form>
+</div>
+
+<div class="scrollmenu" *ngIf="weatherData && weatherData.forecast">
+  <div class="container" *ngFor="let weather of weatherData.forecast.forecastday">
+  <div class="top-data">
+    <img src="../assets/weather-application-day.png" *ngIf="weather.day.avgtemp_f > 40">
+    <img src="../assets/weather-application-night.png" *ngIf="weather.day.avgtemp_f <= 40">
+
+    <div class="weather-data">
+      <div class="location">{{weatherData.location.name}}</div>
+      <div class="temperature">{{ weather.day.avgtemp_f | number:'1.0-0'}}°F</div>
+    </div>
+
+  </div>
+  <div class="bottom-data">
+    <div class="more-info-label">
+      Local Weather Information for {{weather.date}}
+    </div>
+    <div class="more-info-container">
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/min-temp.png">
+          <span>Min (°F)</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.mintemp_f | number:'1.0-0'}}°F
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/max-temp.png">
+          <span>Max (°F)</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.maxtemp_f | number:'1.0-0'}}°F
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/humidity.png">
+          <span>Humidity</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.avghumidity}}%
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/wind.png">
+          <span>Wind Speed</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.maxwind_mph}} mph
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/rain-chance.png">
+          <span>Rain?</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.daily_chance_of_rain}}%
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">
+          <img src="../assets/uv-index.png">
+          <span>UV Index</span>
+        </div>
+        <div class="info-block-value">
+          {{weather.day.uv}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
