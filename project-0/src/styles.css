@@ -54,6 +54,18 @@ body {
     height: 750px;
     border-radius: 20px;
     display: inline-block;
+
+    animation: fadeInFromBelow 1s;
+}
+
+@keyframes fadeInFromBelow {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 div.scrollmenu{
